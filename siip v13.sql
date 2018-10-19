@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 14, 2018 at 02:47 PM
+-- Generation Time: Aug 16, 2018 at 09:52 AM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.12
 
@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `author` (
   `author_id` mediumint(9) NOT NULL,
   `work_unit_id` mediumint(9) DEFAULT NULL,
   `institute_id` mediumint(9) DEFAULT NULL,
+  `auhor_nip` varchar(256) NOT NULL,
   `author_name` varchar(256) NOT NULL,
   `author_degree` varchar(256) NOT NULL,
   `author_address` text NOT NULL,
@@ -44,9 +45,9 @@ CREATE TABLE IF NOT EXISTS `author` (
 -- Dumping data for table `author`
 --
 
-INSERT INTO `author` (`author_id`, `work_unit_id`, `institute_id`, `author_name`, `author_degree`, `author_address`, `author_contact`, `author_email`, `bank_id`, `author_saving_num`, `heir_name`) VALUES
-(4, 1, 1, 'Joko', 'S.T', 'Yogyakarta', '087951245581', 'asd@asd.com', '014', '087542154887', 'Jokowi'),
-(5, 1, 2, 'Susi', 'S.Ked', 'Sleman', '087951245575', 'asd@kakaka.com', '459', '08754215488', 'Susi junior');
+INSERT INTO `author` (`author_id`, `work_unit_id`, `institute_id`, `auhor_nip`, `author_name`, `author_degree`, `author_address`, `author_contact`, `author_email`, `bank_id`, `author_saving_num`, `heir_name`) VALUES
+(4, 1, 1, '', 'Joko', 'S.T', 'Yogyakarta', '087951245581', 'asd@asd.com', '014', '087542154887', 'Jokowi'),
+(5, 1, 2, '', 'Susi', 'S.Ked', 'Sleman', '087951245575', 'asd@kakaka.com', '459', '08754215488', 'Susi junior');
 
 -- --------------------------------------------------------
 
@@ -209,18 +210,27 @@ INSERT INTO `bank` (`bank_name`, `bank_id`) VALUES
 CREATE TABLE IF NOT EXISTS `book` (
   `book_id` mediumint(9) NOT NULL,
   `draft_id` mediumint(9) DEFAULT NULL,
-  `code_id` mediumint(9) DEFAULT NULL,
+  `book_code` varchar(256) NOT NULL,
   `book_title` varchar(256) NOT NULL,
+  `cover` varchar(256) DEFAULT NULL,
   `book_edition` varchar(256) NOT NULL,
   `isbn` varchar(256) NOT NULL,
   `book_file` varchar(256) NOT NULL,
-  `printing_type` varchar(20) NOT NULL,
+  `published_date` date NOT NULL,
+  `printing_type` enum('p','o') NOT NULL,
+  `serial_num` mediumint(9) NOT NULL,
   `serial_num_per_year` mediumint(9) NOT NULL,
   `copies_num` varchar(256) NOT NULL,
   `book_note` text NOT NULL,
-  `book_status` tinyint(1) NOT NULL,
-  `is_reprint` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `is_reprint` enum('y','n') NOT NULL DEFAULT 'n'
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `book`
+--
+
+INSERT INTO `book` (`book_id`, `draft_id`, `book_code`, `book_title`, `cover`, `book_edition`, `isbn`, `book_file`, `published_date`, `printing_type`, `serial_num`, `serial_num_per_year`, `copies_num`, `book_note`, `is_reprint`) VALUES
+(2, NULL, 'A2E', 'gegegegewepe', NULL, 'pertama', '45461156464343743', '', '2018-08-31', 'p', 2000, 1, '20', 'jelek', 'n');
 
 -- --------------------------------------------------------
 
@@ -254,25 +264,6 @@ INSERT INTO `category` (`category_id`, `category_name`, `category_year`, `catego
 -- --------------------------------------------------------
 
 --
--- Table structure for table `code`
---
-
-CREATE TABLE IF NOT EXISTS `code` (
-  `code_id` mediumint(9) NOT NULL,
-  `book_code` varchar(20) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `code`
---
-
-INSERT INTO `code` (`code_id`, `book_code`) VALUES
-(4, '123456'),
-(7, '1234');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `draft`
 --
 
@@ -281,14 +272,12 @@ CREATE TABLE IF NOT EXISTS `draft` (
   `category_id` mediumint(9) DEFAULT NULL,
   `theme_id` mediumint(9) DEFAULT NULL,
   `draft_title` varchar(256) NOT NULL,
-  `draft_file` varchar(256) NOT NULL,
+  `cover` varchar(256) DEFAULT NULL,
   `proposed_fund` int(13) NOT NULL,
   `approved_fund` int(13) NOT NULL,
   `entry_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `finish_date` timestamp NULL DEFAULT NULL,
   `print_date` timestamp NULL DEFAULT NULL,
-  `worksheet_serial_num` varchar(50) NOT NULL,
-  `approved_worksheet` enum('y','n') NOT NULL DEFAULT 'n',
   `is_reviewed` enum('y','n') NOT NULL DEFAULT 'n',
   `review_notes` text NOT NULL,
   `is_revised` enum('y','n') NOT NULL DEFAULT 'n',
@@ -299,15 +288,49 @@ CREATE TABLE IF NOT EXISTS `draft` (
   `layout_notes` text NOT NULL,
   `is_reprint` enum('y','n') NOT NULL DEFAULT 'n',
   `draft_notes` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `draft`
 --
 
-INSERT INTO `draft` (`draft_id`, `category_id`, `theme_id`, `draft_title`, `draft_file`, `proposed_fund`, `approved_fund`, `entry_date`, `finish_date`, `print_date`, `worksheet_serial_num`, `approved_worksheet`, `is_reviewed`, `review_notes`, `is_revised`, `revise_notes`, `is_edited`, `edit_notes`, `is_layouted`, `layout_notes`, `is_reprint`, `draft_notes`) VALUES
-(1, 8, 4, 'qweqwe', 'qweqewqeqweqweqwewqe', 10000, 100000000, '2018-08-14 09:10:20', '2018-08-30 09:10:20', '2018-08-14 09:10:20', '212456201212', 'n', 'n', 'sssssss', 'n', 'ddd', 'n', 'ffffff', 'n', 'werwer', 'n', 'fgdgdfg'),
-(3, 2, 5, 'mnmnmnm', 'mnmnmnmnmn', 10121, 45457, '2018-08-14 09:13:17', NULL, NULL, '654656', 'n', 'n', '', 'n', '', 'n', '', 'n', '', 'n', '');
+INSERT INTO `draft` (`draft_id`, `category_id`, `theme_id`, `draft_title`, `cover`, `proposed_fund`, `approved_fund`, `entry_date`, `finish_date`, `print_date`, `is_reviewed`, `review_notes`, `is_revised`, `revise_notes`, `is_edited`, `edit_notes`, `is_layouted`, `layout_notes`, `is_reprint`, `draft_notes`) VALUES
+(5, 2, 4, 'docx', '20180815221457.docx', 12000, 0, '2018-08-15 15:14:57', NULL, NULL, 'n', '', 'n', '', 'n', '', 'n', '', 'n', ''),
+(6, 2, 4, 'doc', '20180815221617.docx', 90000, 0, '2018-08-15 15:16:17', NULL, NULL, 'n', '', 'n', '', 'n', '', 'n', '', 'n', ''),
+(7, 7, 5, 'contoh 3 ', '20180815223114', 50000, 0, '2018-08-15 15:31:14', NULL, NULL, 'n', '', 'n', '', 'n', '', 'n', '', 'n', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `draft_author`
+--
+
+CREATE TABLE IF NOT EXISTS `draft_author` (
+  `draft_author_id` mediumint(9) NOT NULL,
+  `draft_id` mediumint(9) DEFAULT NULL,
+  `author_id` mediumint(9) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `draft_author`
+--
+
+INSERT INTO `draft_author` (`draft_author_id`, `draft_id`, `author_id`) VALUES
+(1, NULL, 4),
+(2, NULL, 5),
+(3, NULL, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `draft_reviewer`
+--
+
+CREATE TABLE IF NOT EXISTS `draft_reviewer` (
+  `draft_reviewer_id` mediumint(9) NOT NULL,
+  `draft_id` mediumint(9) DEFAULT NULL,
+  `reviewer_id` mediumint(9) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -318,15 +341,15 @@ INSERT INTO `draft` (`draft_id`, `category_id`, `theme_id`, `draft_title`, `draf
 CREATE TABLE IF NOT EXISTS `faculty` (
   `faculty_id` mediumint(9) NOT NULL,
   `faculty_name` varchar(256) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `faculty`
 --
 
 INSERT INTO `faculty` (`faculty_id`, `faculty_name`) VALUES
-(1, 'Kehutanan'),
-(3, 'Teknik');
+(3, 'Teknik'),
+(4, 'Kedokteran');
 
 -- --------------------------------------------------------
 
@@ -351,28 +374,6 @@ INSERT INTO `institute` (`institute_id`, `institute_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `process`
---
-
-CREATE TABLE IF NOT EXISTS `process` (
-  `process_id` mediumint(9) NOT NULL,
-  `draft_id` mediumint(9) DEFAULT NULL,
-  `reviewer_id` mediumint(9) DEFAULT NULL,
-  `author_id` mediumint(9) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `process`
---
-
-INSERT INTO `process` (`process_id`, `draft_id`, `reviewer_id`, `author_id`) VALUES
-(1, 1, 4, 4),
-(2, 1, 4, 5),
-(3, 3, 4, 5);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `responsibility`
 --
 
@@ -390,25 +391,28 @@ CREATE TABLE IF NOT EXISTS `responsibility` (
 
 CREATE TABLE IF NOT EXISTS `reviewer` (
   `reviewer_id` mediumint(9) NOT NULL,
+  `reviewer_nip` varchar(256) NOT NULL,
   `reviewer_name` varchar(256) NOT NULL,
   `faculty_id` mediumint(9) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `reviewer`
 --
 
-INSERT INTO `reviewer` (`reviewer_id`, `reviewer_name`, `faculty_id`) VALUES
-(1, 'Andi Made', 1),
-(4, 'Andi', 1),
-(5, 'Prabowo', 1),
-(6, 'Jokowi', 1),
-(9, 'Mirna', 3),
-(11, 'Bima', 1),
-(12, 'Jono', 3),
-(13, 'Sandi', 1),
-(14, 'Joko', 3),
-(15, 'Suparjo', 1);
+INSERT INTO `reviewer` (`reviewer_id`, `reviewer_nip`, `reviewer_name`, `faculty_id`) VALUES
+(1, '', 'Andi Made', 3),
+(4, '', 'Andi', NULL),
+(5, '', 'Prabowo', NULL),
+(6, '', 'Jokowi', NULL),
+(9, '', 'Mirna', 3),
+(11, '', 'Bima', NULL),
+(12, '', 'Jono', 3),
+(13, '', 'Sandi', NULL),
+(14, '', 'Joko', 3),
+(15, '', 'Suparjo', NULL),
+(16, '', 'Sandi', 3),
+(17, '', 'Sandi', 3);
 
 -- --------------------------------------------------------
 
@@ -454,7 +458,6 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`user_id`, `username`, `password`, `level`, `is_blocked`) VALUES
 (9, 'superadmin', '17c4520f6cfd1ab53d8745e84681eb49', 'superadmin', 'n'),
-(10, 'samsul', '6ddcd35687be9a4415e4416a6dd6829e', 'admin_penerbitan', 'n'),
 (11, 'dadang', '0037bb978d51e84d1ad5478e85430f26', 'admin_penerbitan', 'n'),
 (13, 'joko', '9ba0009aa81e794e628a04b51eaf7d7f', 'admin_pemasaran', 'y');
 
@@ -468,9 +471,7 @@ CREATE TABLE IF NOT EXISTS `worksheet` (
   `worksheet_id` mediumint(9) NOT NULL,
   `draft_id` mediumint(9) DEFAULT NULL,
   `worksheet_num` varchar(256) NOT NULL,
-  `is_reprint` tinyint(1) NOT NULL,
-  `reprint_code` varchar(256) NOT NULL,
-  `worksheet_status` varchar(256) NOT NULL
+  `is_reprint` enum('y','n') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -518,7 +519,7 @@ ALTER TABLE `bank`
 ALTER TABLE `book`
   ADD PRIMARY KEY (`book_id`),
   ADD KEY `id_proposal` (`draft_id`),
-  ADD KEY `code_id` (`code_id`);
+  ADD KEY `code_id` (`book_code`);
 
 --
 -- Indexes for table `category`
@@ -527,18 +528,30 @@ ALTER TABLE `category`
   ADD PRIMARY KEY (`category_id`);
 
 --
--- Indexes for table `code`
---
-ALTER TABLE `code`
-  ADD PRIMARY KEY (`code_id`);
-
---
 -- Indexes for table `draft`
 --
 ALTER TABLE `draft`
   ADD PRIMARY KEY (`draft_id`),
   ADD KEY `id_kategori` (`category_id`),
   ADD KEY `id_penulis` (`theme_id`);
+
+--
+-- Indexes for table `draft_author`
+--
+ALTER TABLE `draft_author`
+  ADD PRIMARY KEY (`draft_author_id`),
+  ADD KEY `draft_id` (`draft_id`),
+  ADD KEY `author_id` (`author_id`);
+
+--
+-- Indexes for table `draft_reviewer`
+--
+ALTER TABLE `draft_reviewer`
+  ADD PRIMARY KEY (`draft_reviewer_id`),
+  ADD KEY `draft_id` (`draft_id`),
+  ADD KEY `author_id` (`reviewer_id`),
+  ADD KEY `reviewer_id` (`reviewer_id`),
+  ADD KEY `draft_id_2` (`draft_id`);
 
 --
 -- Indexes for table `faculty`
@@ -551,15 +564,6 @@ ALTER TABLE `faculty`
 --
 ALTER TABLE `institute`
   ADD PRIMARY KEY (`institute_id`);
-
---
--- Indexes for table `process`
---
-ALTER TABLE `process`
-  ADD PRIMARY KEY (`process_id`),
-  ADD KEY `draft_id` (`draft_id`),
-  ADD KEY `reviewer_id` (`reviewer_id`),
-  ADD KEY `author_id` (`author_id`);
 
 --
 -- Indexes for table `responsibility`
@@ -614,37 +618,37 @@ ALTER TABLE `author`
 -- AUTO_INCREMENT for table `book`
 --
 ALTER TABLE `book`
-  MODIFY `book_id` mediumint(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `book_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
   MODIFY `category_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
--- AUTO_INCREMENT for table `code`
---
-ALTER TABLE `code`
-  MODIFY `code_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
---
 -- AUTO_INCREMENT for table `draft`
 --
 ALTER TABLE `draft`
-  MODIFY `draft_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `draft_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `draft_author`
+--
+ALTER TABLE `draft_author`
+  MODIFY `draft_author_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `draft_reviewer`
+--
+ALTER TABLE `draft_reviewer`
+  MODIFY `draft_reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `faculty_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `faculty_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `institute`
 --
 ALTER TABLE `institute`
   MODIFY `institute_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `process`
---
-ALTER TABLE `process`
-  MODIFY `process_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `responsibility`
 --
@@ -654,7 +658,7 @@ ALTER TABLE `responsibility`
 -- AUTO_INCREMENT for table `reviewer`
 --
 ALTER TABLE `reviewer`
-  MODIFY `reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
+  MODIFY `reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT for table `theme`
 --
@@ -691,7 +695,6 @@ ALTER TABLE `author`
 -- Constraints for table `book`
 --
 ALTER TABLE `book`
-  ADD CONSTRAINT `book_ibfk_1` FOREIGN KEY (`code_id`) REFERENCES `code` (`code_id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `book_ibfk_2` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
@@ -702,12 +705,18 @@ ALTER TABLE `draft`
   ADD CONSTRAINT `draft_ibfk_2` FOREIGN KEY (`theme_id`) REFERENCES `theme` (`theme_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Constraints for table `process`
+-- Constraints for table `draft_author`
 --
-ALTER TABLE `process`
-  ADD CONSTRAINT `process_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `author` (`author_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `process_ibfk_2` FOREIGN KEY (`reviewer_id`) REFERENCES `reviewer` (`reviewer_id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `process_ibfk_3` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `draft_author`
+  ADD CONSTRAINT `draft_author_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `author` (`author_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `draft_author_ibfk_3` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `draft_reviewer`
+--
+ALTER TABLE `draft_reviewer`
+  ADD CONSTRAINT `draft_reviewer_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `draft_reviewer_ibfk_2` FOREIGN KEY (`reviewer_id`) REFERENCES `reviewer` (`reviewer_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `responsibility`
