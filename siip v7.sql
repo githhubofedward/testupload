@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 23, 2018 at 05:51 PM
--- Server version: 10.1.30-MariaDB
--- PHP Version: 5.6.33
+-- Generation Time: Jul 31, 2018 at 08:54 PM
+-- Server version: 10.1.28-MariaDB
+-- PHP Version: 7.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `siip`
+-- Database: `ugm`
 --
 
 -- --------------------------------------------------------
@@ -30,26 +30,16 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `author` (
   `author_id` mediumint(9) NOT NULL,
+  `work_unit_id` mediumint(9) NOT NULL,
+  `institute_id` mediumint(9) NOT NULL,
   `author_name` varchar(256) NOT NULL,
   `author_degree` varchar(256) NOT NULL,
-  `work_unit` varchar(256) NOT NULL,
-  `instance_name` varchar(256) NOT NULL,
   `author_address` text NOT NULL,
   `author_contact` varchar(20) NOT NULL,
   `author_email` varchar(256) NOT NULL,
   `author_saving_num` varchar(20) NOT NULL,
   `heir_name` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `author`
---
-
-INSERT INTO `author` (`author_id`, `author_name`, `author_degree`, `work_unit`, `instance_name`, `author_address`, `author_contact`, `author_email`, `author_saving_num`, `heir_name`) VALUES
-(1, 'bagas', 'S1', 'FT', 'UGM', 'purworejo', '085640888777', 'bagas@gmail.com', '8796665', 'anak bagas'),
-(2, 'edward', 'S1', 'FEB', 'UGM', 'jakarta', '0857888333111', 'edward@yahoo.com', '987555422', 'anak edward'),
-(3, 'syu', 'S1', 'FKH', 'UGM', 'medan', '08544466777', 'syu@ugm.ac.id', '998543432', 'anak syu'),
-(4, 'kara', 'S2', 'FMIPA', 'UGM', 'jogja', '086555331121', 'kara@jos.com', '8367448', 'anak kara');
 
 -- --------------------------------------------------------
 
@@ -73,14 +63,6 @@ CREATE TABLE `book` (
   `is_reprint` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `book`
---
-
-INSERT INTO `book` (`book_id`, `draft_id`, `code_id`, `book_title`, `book_edition`, `isbn`, `book_file`, `printing_type`, `serial_num_per_year`, `copies_num`, `book_note`, `book_status`, `is_reprint`) VALUES
-(1, 2, 1, 'buku mysql', '1', '93489384', 'disini aja', '1', 200, '500', '0', 1, 0),
-(2, 4, 1, 'buku ci', '1', '4536546', 'sinii', 'tauk', 12, '400', 'keren bukunya jois', 1, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -97,14 +79,6 @@ CREATE TABLE `category` (
   `category_status` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `category`
---
-
-INSERT INTO `category` (`category_id`, `category_name`, `category_year`, `category_note`, `date_open`, `date_close`, `category_status`) VALUES
-(1, 'hibah', 2018, 'kategori hibah broo', '2018-06-19 00:00:00', '2018-08-03 00:00:00', 1),
-(2, 'umum', 2018, 'umum untuk orang2 broo', '2018-07-02 00:00:00', '2018-09-08 00:00:00', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -115,38 +89,6 @@ CREATE TABLE `code` (
   `code_id` mediumint(9) NOT NULL,
   `book_code` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `code`
---
-
-INSERT INTO `code` (`code_id`, `book_code`) VALUES
-(1, '100cetakbro');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `datax`
---
-
-CREATE TABLE `datax` (
-  `data_id` mediumint(9) NOT NULL,
-  `draft_id` mediumint(9) DEFAULT NULL,
-  `reviewer_id` mediumint(9) DEFAULT NULL,
-  `author_id` mediumint(9) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `datax`
---
-
-INSERT INTO `datax` (`data_id`, `draft_id`, `reviewer_id`, `author_id`) VALUES
-(1, 1, 1, 1),
-(2, 1, NULL, 4),
-(3, 2, 2, 2),
-(4, 3, 1, 3),
-(5, 4, 3, 1),
-(6, 4, 4, NULL);
 
 -- --------------------------------------------------------
 
@@ -178,15 +120,18 @@ CREATE TABLE `draft` (
   `draft_notes` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `draft`
+-- Table structure for table `process`
 --
 
-INSERT INTO `draft` (`draft_id`, `category_id`, `theme_id`, `draft_title`, `draft_file`, `proposed_fund`, `approved_fund`, `entry_date`, `finish_date`, `print_date`, `worksheet_serial_num`, `approved_worksheet`, `is_reviewed`, `review_notes`, `is_revised`, `revise_notes`, `is_edited`, `edit_notes`, `is_layouted`, `is_reprint`, `draft_notes`) VALUES
-(1, 1, 1, 'draft1', 'file/disini', 5000000, 2000000, '2018-07-23 00:00:00', '2018-07-27 00:00:00', '2018-07-25 00:00:00', 134354252, 0, 0, 'belum sampe', 0, 'tidak sampe', 0, 'nope', 0, 0, 'ditolak bosku'),
-(2, 1, 2, 'draft2', 'disini aja', 560000, 450000, '2018-07-17 00:00:00', '2018-07-19 00:00:00', '2018-07-21 00:00:00', 2455647, 1, 1, 'sipp', 1, 'sipplah', 1, 'okay', 1, 0, 'mantap lanjut cetak'),
-(3, 2, 3, 'draft3', 'disini', 39000, 37000, '2018-07-03 00:00:00', '2018-07-04 00:00:00', '2018-07-07 00:00:00', 4546765, 0, 0, 'gagal', 0, 'nooo', 0, 'gagal', 0, 0, 'tolak keras'),
-(4, 2, 2, 'draft4', 'sini ajah bro', 56000, 88990, '2018-07-08 00:00:00', '2018-07-14 00:00:00', '2018-07-13 00:00:00', 5356467, 1, 1, 'yeay', 0, 'npopee', 0, 'noo', 0, 0, 'gagal total');
+CREATE TABLE `process` (
+  `process_id` mediumint(9) NOT NULL,
+  `draft_id` mediumint(9) DEFAULT NULL,
+  `reviewer_id` mediumint(9) DEFAULT NULL,
+  `author_id` mediumint(9) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -200,19 +145,6 @@ CREATE TABLE `responsibility` (
   `draft_id` mediumint(9) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `responsibility`
---
-
-INSERT INTO `responsibility` (`responsibility_id`, `user_id`, `draft_id`) VALUES
-(1, 1, 1),
-(2, 2, 1),
-(3, 3, 1),
-(4, 1, 2),
-(5, 4, 2),
-(6, 1, 3),
-(7, 8, 3);
-
 -- --------------------------------------------------------
 
 --
@@ -222,18 +154,8 @@ INSERT INTO `responsibility` (`responsibility_id`, `user_id`, `draft_id`) VALUES
 CREATE TABLE `reviewer` (
   `reviewer_id` mediumint(9) NOT NULL,
   `reviewer_name` varchar(256) NOT NULL,
-  `reviewer_faculty` varchar(256) NOT NULL
+  `faculty_id` mediumint(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `reviewer`
---
-
-INSERT INTO `reviewer` (`reviewer_id`, `reviewer_name`, `reviewer_faculty`) VALUES
-(1, 'pak aji', 'FT'),
-(2, 'pak baroto', 'FK'),
-(3, 'pak kunto ', 'FEB'),
-(4, 'pak willy', 'fisipol');
 
 -- --------------------------------------------------------
 
@@ -244,10 +166,10 @@ INSERT INTO `reviewer` (`reviewer_id`, `reviewer_name`, `reviewer_faculty`) VALU
 CREATE TABLE `role` (
   `role_id` mediumint(9) NOT NULL,
   `role_name` varchar(256) NOT NULL,
-  `publishing_module` varchar(256) NOT NULL,
-  `printing_module` varchar(256) NOT NULL,
-  `marketing_module` varchar(256) NOT NULL,
-  `storage_module` varchar(256) NOT NULL
+  `publishing_module` tinyint(1) NOT NULL,
+  `printing_module` tinyint(1) NOT NULL,
+  `marketing_module` tinyint(1) NOT NULL,
+  `storage_module` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -255,8 +177,12 @@ CREATE TABLE `role` (
 --
 
 INSERT INTO `role` (`role_id`, `role_name`, `publishing_module`, `printing_module`, `marketing_module`, `storage_module`) VALUES
-(1, 'superadmin', '1', '1', '1', '1'),
-(2, 'admin penerbitan', '1', '0', '0', '0');
+(1, 'SUPERADMIN', 1, 1, 1, 1),
+(2, 'PUBLISHING ADMIN', 1, 0, 0, 0),
+(3, 'PUBLISHING STAFF', 1, 0, 0, 0),
+(4, 'MARKETING', 0, 0, 1, 0),
+(5, 'PRODUCTION ADMIN', 0, 1, 0, 0),
+(6, 'STORAGE ADMIN', 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -268,15 +194,6 @@ CREATE TABLE `theme` (
   `theme_id` mediumint(9) NOT NULL,
   `theme_name` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `theme`
---
-
-INSERT INTO `theme` (`theme_id`, `theme_name`) VALUES
-(1, 'komputer'),
-(2, 'ternak'),
-(3, 'kesehatan');
 
 -- --------------------------------------------------------
 
@@ -296,8 +213,12 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`user_id`, `username`, `password`, `role_id`) VALUES
-(1, 'samsul', 'samsul11', 2),
-(2, 'wayan', 'wayan88', 1);
+(1, 'superadmin', 'superadmin', 1),
+(2, 'publishingadmin', 'admin', 2),
+(3, 'publishingstaff', 'staff', 3),
+(4, 'marketingadmin', 'admin', 4),
+(5, 'productionadmin', 'admin', 5),
+(6, 'storageadmin', 'admin', 6);
 
 -- --------------------------------------------------------
 
@@ -315,14 +236,6 @@ CREATE TABLE `worksheet` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `worksheet`
---
-
-INSERT INTO `worksheet` (`worksheet_id`, `draft_id`, `worksheet_num`, `is_reprint`, `reprint_code`, `worksheet_status`) VALUES
-(1, 1, 'aassdd', 0, 'cu', '1'),
-(2, 3, 'ccvvbb', 0, 'nocu', '0');
-
---
 -- Indexes for dumped tables
 --
 
@@ -330,14 +243,17 @@ INSERT INTO `worksheet` (`worksheet_id`, `draft_id`, `worksheet_num`, `is_reprin
 -- Indexes for table `author`
 --
 ALTER TABLE `author`
-  ADD PRIMARY KEY (`author_id`);
+  ADD PRIMARY KEY (`author_id`),
+  ADD KEY `work_unit_id` (`work_unit_id`),
+  ADD KEY `institute_id` (`institute_id`);
 
 --
 -- Indexes for table `book`
 --
 ALTER TABLE `book`
   ADD PRIMARY KEY (`book_id`),
-  ADD KEY `id_proposal` (`draft_id`);
+  ADD KEY `id_proposal` (`draft_id`),
+  ADD KEY `code_id` (`code_id`);
 
 --
 -- Indexes for table `category`
@@ -352,21 +268,21 @@ ALTER TABLE `code`
   ADD PRIMARY KEY (`code_id`);
 
 --
--- Indexes for table `datax`
---
-ALTER TABLE `datax`
-  ADD PRIMARY KEY (`data_id`),
-  ADD KEY `draft_id` (`draft_id`),
-  ADD KEY `reviewer_id` (`reviewer_id`),
-  ADD KEY `author_id` (`author_id`);
-
---
 -- Indexes for table `draft`
 --
 ALTER TABLE `draft`
   ADD PRIMARY KEY (`draft_id`),
   ADD KEY `id_kategori` (`category_id`),
   ADD KEY `id_penulis` (`theme_id`);
+
+--
+-- Indexes for table `process`
+--
+ALTER TABLE `process`
+  ADD PRIMARY KEY (`process_id`),
+  ADD KEY `draft_id` (`draft_id`),
+  ADD KEY `reviewer_id` (`reviewer_id`),
+  ADD KEY `author_id` (`author_id`);
 
 --
 -- Indexes for table `responsibility`
@@ -380,7 +296,8 @@ ALTER TABLE `responsibility`
 -- Indexes for table `reviewer`
 --
 ALTER TABLE `reviewer`
-  ADD PRIMARY KEY (`reviewer_id`);
+  ADD PRIMARY KEY (`reviewer_id`),
+  ADD KEY `faculty_id` (`faculty_id`);
 
 --
 -- Indexes for table `role`
@@ -437,16 +354,16 @@ ALTER TABLE `code`
   MODIFY `code_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `datax`
---
-ALTER TABLE `datax`
-  MODIFY `data_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
 -- AUTO_INCREMENT for table `draft`
 --
 ALTER TABLE `draft`
   MODIFY `draft_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `process`
+--
+ALTER TABLE `process`
+  MODIFY `process_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `responsibility`
@@ -464,7 +381,7 @@ ALTER TABLE `reviewer`
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `role_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `role_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `theme`
@@ -476,13 +393,58 @@ ALTER TABLE `theme`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `worksheet`
 --
 ALTER TABLE `worksheet`
   MODIFY `worksheet_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `book`
+--
+ALTER TABLE `book`
+  ADD CONSTRAINT `book_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `book_ibfk_2` FOREIGN KEY (`code_id`) REFERENCES `code` (`code_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `draft`
+--
+ALTER TABLE `draft`
+  ADD CONSTRAINT `draft_ibfk_1` FOREIGN KEY (`theme_id`) REFERENCES `theme` (`theme_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `draft_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `process`
+--
+ALTER TABLE `process`
+  ADD CONSTRAINT `process_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `process_ibfk_2` FOREIGN KEY (`reviewer_id`) REFERENCES `reviewer` (`reviewer_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `process_ibfk_3` FOREIGN KEY (`author_id`) REFERENCES `author` (`author_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `responsibility`
+--
+ALTER TABLE `responsibility`
+  ADD CONSTRAINT `responsibility_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `responsibility_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `worksheet`
+--
+ALTER TABLE `worksheet`
+  ADD CONSTRAINT `worksheet_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
