@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 21, 2018 at 07:15 AM
--- Server version: 10.1.30-MariaDB
--- PHP Version: 5.6.33
+-- Generation Time: May 21, 2018 at 08:22 AM
+-- Server version: 10.1.28-MariaDB
+-- PHP Version: 7.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `siip`
+-- Database: `ugmpress`
 --
 
 -- --------------------------------------------------------
@@ -37,7 +37,7 @@ CREATE TABLE `buku` (
   `edisi_buku` varchar(256) NOT NULL,
   `file_buku` varchar(256) NOT NULL,
   `jenis_cetak` varchar(256) NOT NULL,
-  `id_jml_cetak` int(20) NOT NULL,
+  `id_jml_cetak` smallint(6) NOT NULL,
   `isbn` varchar(256) NOT NULL,
   `no_urut_pertahun` mediumint(9) NOT NULL,
   `jumlah_eksemplar` mediumint(9) NOT NULL,
@@ -45,13 +45,6 @@ CREATE TABLE `buku` (
   `status_buku` varchar(256) NOT NULL,
   `is_cetak_ulang` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `buku`
---
-
-INSERT INTO `buku` (`id_buku`, `id_proposal`, `id_penulis`, `id_tema`, `judul_buku`, `edisi_buku`, `file_buku`, `jenis_cetak`, `id_jml_cetak`, `isbn`, `no_urut_pertahun`, `jumlah_eksemplar`, `keterangan`, `status_buku`, `is_cetak_ulang`) VALUES
-(192384, 1, 1, 1, 'pemrograman ci', 'pertama', 'kosongggg', 'POD', 0, '2342454', 1, 20, 'keren', 'sudah tecetak', 0);
 
 -- --------------------------------------------------------
 
@@ -76,7 +69,7 @@ CREATE TABLE `history` (
 --
 
 CREATE TABLE `kategori` (
-  `id_kategori` smallint(6) NOT NULL,
+  `id_kategori` mediumint(9) NOT NULL,
   `nama_kategori` varchar(256) NOT NULL,
   `tahun_kategori` char(5) NOT NULL,
   `keterangan` text NOT NULL,
@@ -118,13 +111,6 @@ CREATE TABLE `lembar_kerja` (
   `kode_cetak_ulang` varchar(256) NOT NULL,
   `status_lembar_kerja` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `lembar_kerja`
---
-
-INSERT INTO `lembar_kerja` (`id_lembar_kerja`, `id_proposal`, `id_buku`, `nomor_lembar_kerja`, `is_cetak_ulang`, `kode_cetak_ulang`, `status_lembar_kerja`) VALUES
-(1, 1, 1, '22', 0, 'CU', 'progress');
 
 -- --------------------------------------------------------
 
@@ -234,11 +220,11 @@ CREATE TABLE `tema` (
 --
 
 CREATE TABLE `user` (
-  `id_user` smallint(6) NOT NULL,
+  `id_user` mediumint(9) NOT NULL,
   `username` varchar(256) NOT NULL,
   `password` varchar(256) NOT NULL,
-  `id_role` smallint(6) NOT NULL,
-  `id_history` smallint(6) NOT NULL
+  `id_role` mediumint(9) NOT NULL,
+  `id_history` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -249,7 +235,9 @@ CREATE TABLE `user` (
 -- Indexes for table `buku`
 --
 ALTER TABLE `buku`
-  ADD PRIMARY KEY (`id_buku`);
+  ADD PRIMARY KEY (`id_buku`),
+  ADD KEY `id_jml_cetak` (`id_jml_cetak`),
+  ADD KEY `id_proposal` (`id_proposal`);
 
 --
 -- Indexes for table `history`
@@ -273,7 +261,9 @@ ALTER TABLE `konversi`
 -- Indexes for table `lembar_kerja`
 --
 ALTER TABLE `lembar_kerja`
-  ADD PRIMARY KEY (`id_lembar_kerja`);
+  ADD PRIMARY KEY (`id_lembar_kerja`),
+  ADD KEY `id_buku` (`id_buku`),
+  ADD KEY `id_proposal` (`id_proposal`);
 
 --
 -- Indexes for table `penulis`
@@ -285,7 +275,12 @@ ALTER TABLE `penulis`
 -- Indexes for table `proposal`
 --
 ALTER TABLE `proposal`
-  ADD PRIMARY KEY (`id_proposal`);
+  ADD PRIMARY KEY (`id_proposal`),
+  ADD KEY `id_kategori` (`id_kategori`),
+  ADD KEY `id_penulis` (`id_penulis`),
+  ADD KEY `id_user` (`id_user`),
+  ADD KEY `id_tema` (`id_tema`),
+  ADD KEY `id_reviewer` (`id_reviewer`);
 
 --
 -- Indexes for table `reviewer`
@@ -309,7 +304,9 @@ ALTER TABLE `tema`
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`id_user`);
+  ADD PRIMARY KEY (`id_user`),
+  ADD KEY `id_role` (`id_role`),
+  ADD KEY `id_history` (`id_history`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -331,7 +328,7 @@ ALTER TABLE `history`
 -- AUTO_INCREMENT for table `kategori`
 --
 ALTER TABLE `kategori`
-  MODIFY `id_kategori` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_kategori` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `konversi`
@@ -379,7 +376,52 @@ ALTER TABLE `tema`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` smallint(6) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` mediumint(9) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `buku`
+--
+ALTER TABLE `buku`
+  ADD CONSTRAINT `buku_ibfk_1` FOREIGN KEY (`id_jml_cetak`) REFERENCES `konversi` (`id_jml_cetak`),
+  ADD CONSTRAINT `buku_ibfk_2` FOREIGN KEY (`id_proposal`) REFERENCES `proposal` (`id_proposal`);
+
+--
+-- Constraints for table `lembar_kerja`
+--
+ALTER TABLE `lembar_kerja`
+  ADD CONSTRAINT `lembar_kerja_ibfk_1` FOREIGN KEY (`id_buku`) REFERENCES `buku` (`id_buku`),
+  ADD CONSTRAINT `lembar_kerja_ibfk_2` FOREIGN KEY (`id_proposal`) REFERENCES `proposal` (`id_proposal`);
+
+--
+-- Constraints for table `proposal`
+--
+ALTER TABLE `proposal`
+  ADD CONSTRAINT `proposal_ibfk_1` FOREIGN KEY (`id_kategori`) REFERENCES `kategori` (`id_kategori`),
+  ADD CONSTRAINT `proposal_ibfk_2` FOREIGN KEY (`id_penulis`) REFERENCES `penulis` (`id_penulis`);
+
+--
+-- Constraints for table `reviewer`
+--
+ALTER TABLE `reviewer`
+  ADD CONSTRAINT `reviewer_ibfk_1` FOREIGN KEY (`id_reviewer`) REFERENCES `proposal` (`id_reviewer`);
+
+--
+-- Constraints for table `tema`
+--
+ALTER TABLE `tema`
+  ADD CONSTRAINT `tema_ibfk_1` FOREIGN KEY (`id_tema`) REFERENCES `proposal` (`id_tema`);
+
+--
+-- Constraints for table `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `proposal` (`id_user`),
+  ADD CONSTRAINT `user_ibfk_2` FOREIGN KEY (`id_role`) REFERENCES `role_user` (`id_role`),
+  ADD CONSTRAINT `user_ibfk_3` FOREIGN KEY (`id_history`) REFERENCES `history` (`id_history`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
