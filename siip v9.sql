@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 07, 2018 at 06:40 AM
+-- Generation Time: Aug 07, 2018 at 09:11 AM
 -- Server version: 10.1.34-MariaDB
 -- PHP Version: 7.2.7
 
@@ -182,33 +182,6 @@ CREATE TABLE `reviewer` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `role`
---
-
-CREATE TABLE `role` (
-  `role_id` mediumint(9) NOT NULL,
-  `role_name` varchar(256) NOT NULL,
-  `publishing_module` tinyint(1) NOT NULL,
-  `printing_module` tinyint(1) NOT NULL,
-  `marketing_module` tinyint(1) NOT NULL,
-  `storage_module` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `role`
---
-
-INSERT INTO `role` (`role_id`, `role_name`, `publishing_module`, `printing_module`, `marketing_module`, `storage_module`) VALUES
-(1, 'SUPERADMIN', 1, 1, 1, 1),
-(2, 'PUBLISHING ADMIN', 1, 0, 0, 0),
-(3, 'PUBLISHING STAFF', 1, 0, 0, 0),
-(4, 'MARKETING', 0, 0, 1, 0),
-(5, 'PRODUCTION ADMIN', 0, 1, 0, 0),
-(6, 'STORAGE ADMIN', 0, 0, 0, 1);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `theme`
 --
 
@@ -227,20 +200,9 @@ CREATE TABLE `user` (
   `user_id` mediumint(9) NOT NULL,
   `username` varchar(256) NOT NULL,
   `password` varchar(256) NOT NULL,
-  `role_id` mediumint(9) NOT NULL
+  `level` enum('superadmin','admin_penerbitan','staff_penerbitan','admin_pemasaran','admin_percetakan','admin_gudang','author','reviewer') NOT NULL,
+  `is_blocked` enum('y','n') NOT NULL DEFAULT 'n'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `user`
---
-
-INSERT INTO `user` (`user_id`, `username`, `password`, `role_id`) VALUES
-(1, 'superadmin', 'superadmin', 1),
-(2, 'publishingadmin', 'admin', 2),
-(3, 'publishingstaff', 'staff', 3),
-(4, 'marketingadmin', 'admin', 4),
-(5, 'productionadmin', 'admin', 5),
-(6, 'storageadmin', 'admin', 6);
 
 -- --------------------------------------------------------
 
@@ -345,12 +307,6 @@ ALTER TABLE `reviewer`
   ADD KEY `faculty_id` (`faculty_id`);
 
 --
--- Indexes for table `role`
---
-ALTER TABLE `role`
-  ADD PRIMARY KEY (`role_id`);
-
---
 -- Indexes for table `theme`
 --
 ALTER TABLE `theme`
@@ -360,8 +316,7 @@ ALTER TABLE `theme`
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`user_id`),
-  ADD KEY `id_role` (`role_id`);
+  ADD PRIMARY KEY (`user_id`);
 
 --
 -- Indexes for table `worksheet`
@@ -435,12 +390,6 @@ ALTER TABLE `reviewer`
   MODIFY `reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `role`
---
-ALTER TABLE `role`
-  MODIFY `role_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
 -- AUTO_INCREMENT for table `theme`
 --
 ALTER TABLE `theme`
@@ -509,12 +458,6 @@ ALTER TABLE `responsibility`
 --
 ALTER TABLE `reviewer`
   ADD CONSTRAINT `reviewer_ibfk_1` FOREIGN KEY (`faculty_id`) REFERENCES `faculty` (`faculty_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `user`
---
-ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `worksheet`
