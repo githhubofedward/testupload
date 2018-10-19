@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 13, 2018 at 06:49 AM
+-- Generation Time: Aug 13, 2018 at 08:33 AM
 -- Server version: 5.6.26
 -- PHP Version: 5.6.12
 
@@ -28,13 +28,14 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `author` (
   `author_id` mediumint(9) NOT NULL,
-  `work_unit_id` mediumint(9) NOT NULL,
-  `institute_id` mediumint(9) NOT NULL,
+  `work_unit_id` mediumint(9) DEFAULT NULL,
+  `institute_id` mediumint(9) DEFAULT NULL,
   `author_name` varchar(256) NOT NULL,
   `author_degree` varchar(256) NOT NULL,
   `author_address` text NOT NULL,
   `author_contact` varchar(20) NOT NULL,
   `author_email` varchar(256) NOT NULL,
+  `author_saving_bank` varchar(256) NOT NULL,
   `author_saving_num` varchar(20) NOT NULL,
   `heir_name` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -47,8 +48,8 @@ CREATE TABLE IF NOT EXISTS `author` (
 
 CREATE TABLE IF NOT EXISTS `book` (
   `book_id` mediumint(9) NOT NULL,
-  `draft_id` mediumint(9) NOT NULL,
-  `code_id` mediumint(9) NOT NULL,
+  `draft_id` mediumint(9) DEFAULT NULL,
+  `code_id` mediumint(9) DEFAULT NULL,
   `book_title` varchar(256) NOT NULL,
   `book_edition` varchar(256) NOT NULL,
   `isbn` varchar(256) NOT NULL,
@@ -117,8 +118,8 @@ INSERT INTO `code` (`code_id`, `book_code`) VALUES
 
 CREATE TABLE IF NOT EXISTS `draft` (
   `draft_id` mediumint(9) NOT NULL,
-  `category_id` mediumint(9) NOT NULL,
-  `theme_id` mediumint(9) NOT NULL,
+  `category_id` mediumint(9) DEFAULT NULL,
+  `theme_id` mediumint(9) DEFAULT NULL,
   `draft_title` varchar(256) NOT NULL,
   `draft_file` varchar(256) NOT NULL,
   `proposed_fund` int(11) NOT NULL,
@@ -148,15 +149,15 @@ CREATE TABLE IF NOT EXISTS `draft` (
 CREATE TABLE IF NOT EXISTS `faculty` (
   `faculty_id` mediumint(9) NOT NULL,
   `faculty_name` varchar(256) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `faculty`
 --
 
 INSERT INTO `faculty` (`faculty_id`, `faculty_name`) VALUES
-(1, 'Teknik'),
-(2, 'Vokasi');
+(1, 'Kehutanan'),
+(3, 'Vokasi');
 
 -- --------------------------------------------------------
 
@@ -212,16 +213,22 @@ CREATE TABLE IF NOT EXISTS `responsibility` (
 CREATE TABLE IF NOT EXISTS `reviewer` (
   `reviewer_id` mediumint(9) NOT NULL,
   `reviewer_name` varchar(256) NOT NULL,
-  `faculty_id` mediumint(9) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  `faculty_id` mediumint(9) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `reviewer`
 --
 
 INSERT INTO `reviewer` (`reviewer_id`, `reviewer_name`, `faculty_id`) VALUES
-(1, 'Joko', 1),
-(2, 'Susi', 2);
+(1, 'Andi Made', 1),
+(4, 'Andi', 1),
+(5, 'Prabowo', 1),
+(6, 'Jokowi', 1),
+(9, 'Mirna', 3),
+(11, 'Bima', 1),
+(12, 'Jono', 3),
+(13, 'Sandi', 1);
 
 -- --------------------------------------------------------
 
@@ -279,7 +286,7 @@ INSERT INTO `user` (`user_id`, `username`, `password`, `level`, `is_blocked`) VA
 
 CREATE TABLE IF NOT EXISTS `worksheet` (
   `worksheet_id` mediumint(9) NOT NULL,
-  `draft_id` mediumint(9) NOT NULL,
+  `draft_id` mediumint(9) DEFAULT NULL,
   `worksheet_num` varchar(256) NOT NULL,
   `is_reprint` tinyint(1) NOT NULL,
   `reprint_code` varchar(256) NOT NULL,
@@ -440,7 +447,7 @@ ALTER TABLE `draft`
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `faculty_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `faculty_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `institute`
 --
@@ -460,7 +467,7 @@ ALTER TABLE `responsibility`
 -- AUTO_INCREMENT for table `reviewer`
 --
 ALTER TABLE `reviewer`
-  MODIFY `reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `reviewer_id` mediumint(9) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `theme`
 --
@@ -489,49 +496,49 @@ ALTER TABLE `work_unit`
 -- Constraints for table `author`
 --
 ALTER TABLE `author`
-  ADD CONSTRAINT `author_ibfk_1` FOREIGN KEY (`work_unit_id`) REFERENCES `work_unit` (`work_unit_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `author_ibfk_2` FOREIGN KEY (`institute_id`) REFERENCES `institute` (`institute_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `author_ibfk_1` FOREIGN KEY (`work_unit_id`) REFERENCES `work_unit` (`work_unit_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `author_ibfk_2` FOREIGN KEY (`institute_id`) REFERENCES `institute` (`institute_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `book`
 --
 ALTER TABLE `book`
-  ADD CONSTRAINT `book_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `book_ibfk_2` FOREIGN KEY (`code_id`) REFERENCES `code` (`code_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `book_ibfk_1` FOREIGN KEY (`code_id`) REFERENCES `code` (`code_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `book_ibfk_2` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `draft`
 --
 ALTER TABLE `draft`
-  ADD CONSTRAINT `draft_ibfk_1` FOREIGN KEY (`theme_id`) REFERENCES `theme` (`theme_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `draft_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `draft_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `draft_ibfk_2` FOREIGN KEY (`theme_id`) REFERENCES `theme` (`theme_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `process`
 --
 ALTER TABLE `process`
-  ADD CONSTRAINT `process_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `process_ibfk_2` FOREIGN KEY (`reviewer_id`) REFERENCES `reviewer` (`reviewer_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `process_ibfk_3` FOREIGN KEY (`author_id`) REFERENCES `author` (`author_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `process_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `author` (`author_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `process_ibfk_2` FOREIGN KEY (`reviewer_id`) REFERENCES `reviewer` (`reviewer_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `process_ibfk_3` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `responsibility`
 --
 ALTER TABLE `responsibility`
-  ADD CONSTRAINT `responsibility_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `responsibility_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `responsibility_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `responsibility_ibfk_2` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `reviewer`
 --
 ALTER TABLE `reviewer`
-  ADD CONSTRAINT `reviewer_ibfk_1` FOREIGN KEY (`faculty_id`) REFERENCES `faculty` (`faculty_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `reviewer_ibfk_1` FOREIGN KEY (`faculty_id`) REFERENCES `faculty` (`faculty_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `worksheet`
 --
 ALTER TABLE `worksheet`
-  ADD CONSTRAINT `worksheet_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `worksheet_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
