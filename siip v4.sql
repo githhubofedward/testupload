@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 21, 2018 at 08:22 AM
+-- Generation Time: Jul 18, 2018 at 04:26 PM
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 7.1.10
 
@@ -46,6 +46,13 @@ CREATE TABLE `buku` (
   `is_cetak_ulang` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `buku`
+--
+
+INSERT INTO `buku` (`id_buku`, `id_proposal`, `id_penulis`, `id_tema`, `judul_buku`, `edisi_buku`, `file_buku`, `jenis_cetak`, `id_jml_cetak`, `isbn`, `no_urut_pertahun`, `jumlah_eksemplar`, `keterangan`, `status_buku`, `is_cetak_ulang`) VALUES
+(1212121, 323, 3565, 9898, 'dasndksan', '898', 'klskdl', 'djndk', 454, '32122456', 4545, 5454, 'admkadasm', 'horehore', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -61,6 +68,13 @@ CREATE TABLE `history` (
   `current_value` varchar(256) NOT NULL,
   `change_field` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `history`
+--
+
+INSERT INTO `history` (`id_history`, `tgl_login`, `tgl_dibuat`, `ip_akses`, `prev_value`, `current_value`, `change_field`) VALUES
+(78564, '0000-00-00', '0000-00-00', '090909090', '79849', '49456', '49878');
 
 -- --------------------------------------------------------
 
@@ -83,7 +97,7 @@ CREATE TABLE `kategori` (
 --
 
 INSERT INTO `kategori` (`id_kategori`, `nama_kategori`, `tahun_kategori`, `keterangan`, `tanggal_buka`, `tanggal_tutup`, `status`) VALUES
-(1, 'hibah buku UGM', '2018', 'pendaftaran buku hibah untuk dosen ', '2018-05-01 00:00:00', '2018-05-31 00:00:00', 'BUKA CUYY');
+(2, 'hibah buku UGM', '2018', 'pendaftaran buku hibah untuk dosen ', '2018-05-01 00:00:00', '2018-05-31 00:00:00', 'BUKA CUYY');
 
 -- --------------------------------------------------------
 
@@ -95,6 +109,14 @@ CREATE TABLE `konversi` (
   `id_jml_cetak` smallint(6) NOT NULL,
   `kode` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `konversi`
+--
+
+INSERT INTO `konversi` (`id_jml_cetak`, `kode`) VALUES
+(91, 'jsdjs'),
+(99, 'mdkas');
 
 -- --------------------------------------------------------
 
@@ -111,6 +133,15 @@ CREATE TABLE `lembar_kerja` (
   `kode_cetak_ulang` varchar(256) NOT NULL,
   `status_lembar_kerja` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `lembar_kerja`
+--
+
+INSERT INTO `lembar_kerja` (`id_lembar_kerja`, `id_proposal`, `id_buku`, `nomor_lembar_kerja`, `is_cetak_ulang`, `kode_cetak_ulang`, `status_lembar_kerja`) VALUES
+(45, 7878, 89959, '121362456', 1, '45456', '0'),
+(898, 44545, 12121, '15745', 1, '4545', '1'),
+(12132, 316146, 2132, '132132', 1, '13213', '1');
 
 -- --------------------------------------------------------
 
@@ -136,7 +167,8 @@ CREATE TABLE `penulis` (
 --
 
 INSERT INTO `penulis` (`id_penulis`, `nama_penulis`, `gelar_penulis`, `unit_kerja`, `instansi`, `alamat_penulis`, `kontak_penulis`, `email_penulis`, `rekening_penulis`, `ahli_waris`) VALUES
-(1, 'syu', 'S.T', 'teknik elektro', 'UGM', 'medan', '085640999888', 'syu@gmail.com', '0927373838', 'payung');
+(13, 'lasdkla', 'jdks', 'aksdmn', 'smadkmas', 'sdklamdklmas', '024356454', 'kmckda@kmwqp.com', '12145', 'najsdnl'),
+(45464, 'dasdksa', 'dmkasmdk', 'mksamdk', 'dmksamdk', 'makdmkas', '312', 'dmkasdmk@mkdmsk.com', '56456465', 'adkskasmd');
 
 -- --------------------------------------------------------
 
@@ -151,13 +183,13 @@ CREATE TABLE `proposal` (
   `id_user` mediumint(9) NOT NULL,
   `id_tema` mediumint(9) NOT NULL,
   `id_reviewer` mediumint(9) NOT NULL,
+  `id_lembar_kerja` mediumint(9) NOT NULL,
   `judul_proposal` varchar(256) NOT NULL,
   `pengusul` varchar(256) NOT NULL,
   `file_proposal` varchar(256) NOT NULL,
   `dana_yang_diajukan` int(11) NOT NULL,
   `dana_yang_disetujui` int(11) NOT NULL,
   `tanggal_masuk` datetime NOT NULL,
-  `id_lembar_kerja` mediumint(9) NOT NULL,
   `no_urut_lembar_kerja` mediumint(9) NOT NULL,
   `lembar_kerja_is_accepted` tinyint(1) NOT NULL,
   `tanggal_selesai` datetime NOT NULL,
@@ -174,6 +206,14 @@ CREATE TABLE `proposal` (
   `keterangan` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `proposal`
+--
+
+INSERT INTO `proposal` (`id_proposal`, `id_kategori`, `id_penulis`, `id_user`, `id_tema`, `id_reviewer`, `id_lembar_kerja`, `judul_proposal`, `pengusul`, `file_proposal`, `dana_yang_diajukan`, `dana_yang_disetujui`, `tanggal_masuk`, `no_urut_lembar_kerja`, `lembar_kerja_is_accepted`, `tanggal_selesai`, `tanggal_cetak`, `is_reviewed`, `catatan_review`, `is_revised`, `catatan_revisi`, `is_edited`, `catatan_editor`, `is_layouted`, `is_print`, `is_cetak_ulang`, `keterangan`) VALUES
+(233, 5466, 3232, 1515, 13213, 1214564, 7854, 'sdfdsfdsfgh', 'fdghdhgf', 'gdhdgh', 1213, 3213564, '0000-00-00 00:00:00', 4545, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 1, 'dafhdgj', 1, 'dghdgfh', 1, 'sdfdsghdf', 1, 1, 1, 'bdgfhdgfh'),
+(1321, 213, 233, 21321, 2131, 3213, 31, 'sdgnjgfj', 'fghgdfh', 'hdfghdf', 12123, 3655656, '0000-00-00 00:00:00', 3232, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', 0, '', 0, '', 0, '', 0, 0, 0, '');
+
 -- --------------------------------------------------------
 
 --
@@ -186,6 +226,14 @@ CREATE TABLE `reviewer` (
   `fakultas` varchar(256) NOT NULL,
   `id_history` mediumint(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `reviewer`
+--
+
+INSERT INTO `reviewer` (`id_reviewer`, `nama_reviewer`, `fakultas`, `id_history`) VALUES
+(456, 'mkghmhg', '1213', 48549),
+(78949, 'asdgdfg', 'bgfrhtrfh', 1547);
 
 -- --------------------------------------------------------
 
@@ -202,6 +250,14 @@ CREATE TABLE `role_user` (
   `modul_gudang` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `role_user`
+--
+
+INSERT INTO `role_user` (`id_role`, `nama_role`, `modul_penerbitan`, `modul_percetakan`, `modul_pemasaran`, `modul_gudang`) VALUES
+(456, 'dfngfh', 'gfgf', 'bdfbfds', '32156', 'dgdfhdf'),
+(1231, '456', '78949', 'dafdasf', '156145', '6790');
+
 -- --------------------------------------------------------
 
 --
@@ -212,6 +268,14 @@ CREATE TABLE `tema` (
   `id_tema` mediumint(9) NOT NULL,
   `nama_tema` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tema`
+--
+
+INSERT INTO `tema` (`id_tema`, `nama_tema`) VALUES
+(3, 'nf nfkd'),
+(4550, 'sdabgfsghfh');
 
 -- --------------------------------------------------------
 
@@ -226,6 +290,13 @@ CREATE TABLE `user` (
   `id_role` mediumint(9) NOT NULL,
   `id_history` int(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id_user`, `username`, `password`, `id_role`, `id_history`) VALUES
+(12344, '5446', 'sdgfdgdfk', 4654, 1);
 
 --
 -- Indexes for dumped tables
@@ -280,7 +351,8 @@ ALTER TABLE `proposal`
   ADD KEY `id_penulis` (`id_penulis`),
   ADD KEY `id_user` (`id_user`),
   ADD KEY `id_tema` (`id_tema`),
-  ADD KEY `id_reviewer` (`id_reviewer`);
+  ADD KEY `id_reviewer` (`id_reviewer`),
+  ADD KEY `id_lembar_kerja` (`id_lembar_kerja`);
 
 --
 -- Indexes for table `reviewer`
@@ -316,112 +388,67 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `buku`
 --
 ALTER TABLE `buku`
-  MODIFY `id_buku` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=192385;
+  MODIFY `id_buku` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1212122;
 
 --
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `id_history` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_history` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14524565;
 
 --
 -- AUTO_INCREMENT for table `kategori`
 --
 ALTER TABLE `kategori`
-  MODIFY `id_kategori` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_kategori` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=545647;
 
 --
 -- AUTO_INCREMENT for table `konversi`
 --
 ALTER TABLE `konversi`
-  MODIFY `id_jml_cetak` smallint(6) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_jml_cetak` smallint(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `lembar_kerja`
 --
 ALTER TABLE `lembar_kerja`
-  MODIFY `id_lembar_kerja` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_lembar_kerja` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12133;
 
 --
 -- AUTO_INCREMENT for table `penulis`
 --
 ALTER TABLE `penulis`
-  MODIFY `id_penulis` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_penulis` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45465;
 
 --
 -- AUTO_INCREMENT for table `proposal`
 --
 ALTER TABLE `proposal`
-  MODIFY `id_proposal` mediumint(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_proposal` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1322;
 
 --
 -- AUTO_INCREMENT for table `reviewer`
 --
 ALTER TABLE `reviewer`
-  MODIFY `id_reviewer` mediumint(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_reviewer` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78950;
 
 --
 -- AUTO_INCREMENT for table `role_user`
 --
 ALTER TABLE `role_user`
-  MODIFY `id_role` mediumint(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_role` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1232;
 
 --
 -- AUTO_INCREMENT for table `tema`
 --
 ALTER TABLE `tema`
-  MODIFY `id_tema` mediumint(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_tema` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4565;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` mediumint(9) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `buku`
---
-ALTER TABLE `buku`
-  ADD CONSTRAINT `buku_ibfk_1` FOREIGN KEY (`id_jml_cetak`) REFERENCES `konversi` (`id_jml_cetak`),
-  ADD CONSTRAINT `buku_ibfk_2` FOREIGN KEY (`id_proposal`) REFERENCES `proposal` (`id_proposal`);
-
---
--- Constraints for table `lembar_kerja`
---
-ALTER TABLE `lembar_kerja`
-  ADD CONSTRAINT `lembar_kerja_ibfk_1` FOREIGN KEY (`id_buku`) REFERENCES `buku` (`id_buku`),
-  ADD CONSTRAINT `lembar_kerja_ibfk_2` FOREIGN KEY (`id_proposal`) REFERENCES `proposal` (`id_proposal`);
-
---
--- Constraints for table `proposal`
---
-ALTER TABLE `proposal`
-  ADD CONSTRAINT `proposal_ibfk_1` FOREIGN KEY (`id_kategori`) REFERENCES `kategori` (`id_kategori`),
-  ADD CONSTRAINT `proposal_ibfk_2` FOREIGN KEY (`id_penulis`) REFERENCES `penulis` (`id_penulis`);
-
---
--- Constraints for table `reviewer`
---
-ALTER TABLE `reviewer`
-  ADD CONSTRAINT `reviewer_ibfk_1` FOREIGN KEY (`id_reviewer`) REFERENCES `proposal` (`id_reviewer`);
-
---
--- Constraints for table `tema`
---
-ALTER TABLE `tema`
-  ADD CONSTRAINT `tema_ibfk_1` FOREIGN KEY (`id_tema`) REFERENCES `proposal` (`id_tema`);
-
---
--- Constraints for table `user`
---
-ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `proposal` (`id_user`),
-  ADD CONSTRAINT `user_ibfk_2` FOREIGN KEY (`id_role`) REFERENCES `role_user` (`id_role`),
-  ADD CONSTRAINT `user_ibfk_3` FOREIGN KEY (`id_history`) REFERENCES `history` (`id_history`);
+  MODIFY `id_user` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45647;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
