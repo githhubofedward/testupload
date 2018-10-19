@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.8.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 31, 2018 at 08:54 PM
--- Server version: 10.1.28-MariaDB
--- PHP Version: 7.1.10
+-- Generation Time: Aug 07, 2018 at 06:40 AM
+-- Server version: 10.1.34-MariaDB
+-- PHP Version: 7.2.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ugm`
+-- Database: `ugmpress`
 --
 
 -- --------------------------------------------------------
@@ -118,6 +118,28 @@ CREATE TABLE `draft` (
   `is_layouted` tinyint(1) NOT NULL,
   `is_reprint` tinyint(1) NOT NULL,
   `draft_notes` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `faculty`
+--
+
+CREATE TABLE `faculty` (
+  `faculty_id` mediumint(9) NOT NULL,
+  `faculty_name` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `institute`
+--
+
+CREATE TABLE `institute` (
+  `institute_id` mediumint(9) NOT NULL,
+  `institute_name` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -235,6 +257,17 @@ CREATE TABLE `worksheet` (
   `worksheet_status` varchar(256) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `work_unit`
+--
+
+CREATE TABLE `work_unit` (
+  `work_unit_id` mediumint(9) NOT NULL,
+  `work_unit_name` varchar(256) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 --
 -- Indexes for dumped tables
 --
@@ -274,6 +307,18 @@ ALTER TABLE `draft`
   ADD PRIMARY KEY (`draft_id`),
   ADD KEY `id_kategori` (`category_id`),
   ADD KEY `id_penulis` (`theme_id`);
+
+--
+-- Indexes for table `faculty`
+--
+ALTER TABLE `faculty`
+  ADD PRIMARY KEY (`faculty_id`);
+
+--
+-- Indexes for table `institute`
+--
+ALTER TABLE `institute`
+  ADD PRIMARY KEY (`institute_id`);
 
 --
 -- Indexes for table `process`
@@ -326,6 +371,12 @@ ALTER TABLE `worksheet`
   ADD KEY `id_proposal` (`draft_id`);
 
 --
+-- Indexes for table `work_unit`
+--
+ALTER TABLE `work_unit`
+  ADD PRIMARY KEY (`work_unit_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -358,6 +409,12 @@ ALTER TABLE `code`
 --
 ALTER TABLE `draft`
   MODIFY `draft_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `faculty`
+--
+ALTER TABLE `faculty`
+  MODIFY `faculty_id` mediumint(9) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `process`
@@ -402,8 +459,21 @@ ALTER TABLE `worksheet`
   MODIFY `worksheet_id` mediumint(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `work_unit`
+--
+ALTER TABLE `work_unit`
+  MODIFY `work_unit_id` mediumint(9) NOT NULL AUTO_INCREMENT;
+
+--
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `author`
+--
+ALTER TABLE `author`
+  ADD CONSTRAINT `author_ibfk_1` FOREIGN KEY (`work_unit_id`) REFERENCES `work_unit` (`work_unit_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `author_ibfk_2` FOREIGN KEY (`institute_id`) REFERENCES `institute` (`institute_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `book`
@@ -433,6 +503,12 @@ ALTER TABLE `process`
 ALTER TABLE `responsibility`
   ADD CONSTRAINT `responsibility_ibfk_1` FOREIGN KEY (`draft_id`) REFERENCES `draft` (`draft_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `responsibility_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `reviewer`
+--
+ALTER TABLE `reviewer`
+  ADD CONSTRAINT `reviewer_ibfk_1` FOREIGN KEY (`faculty_id`) REFERENCES `faculty` (`faculty_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user`
